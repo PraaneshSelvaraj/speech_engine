@@ -1,19 +1,17 @@
-# speech-engine
+# Speech Engine
 
-speech_engine is a Python package that provides a simple interface for synthesizing text into speech using multiple .
+Speech Engine is a Python package that provides a simple interface for synthesizing text into speech using different TTS engines, including Google Text-to-Speech (gTTS) and Wit.ai Text-to-Speech (Wit TTS).
 
 ## Installation
 
 You can install `speech-engine` using pip:
 
-```python
+```bash
 pip install speech-engine
 ```
 
 ## Usage
-
-### Basic Usage
-
+### TTS_GOOGLE
 ```python
 from speech_engine import TTS_Google, FileExtensionError
 
@@ -34,32 +32,33 @@ except FileExtensionError as e:
     print(e.message)
 ```
 
-
-### Customizing Options
-You can customize various options of the TTS_Google class:
-
-
+### TTS_Witai
 ```python
-# Set the language
-tts.lang = 'en'
+from speech_engine import TTS_Witai, InvalidTokenError, FileExtensionError
 
-# Set the top-level domain (optional)
-tts.tld = 'com'
+# Instantiate TTS_Witai with the Wit.ai auth token
+tts = TTS_Witai(authToken)
 
-# Set the speech speed
-tts.slow = False
-```
+# Check if the provided token is valid
+if not tts.is_valid_token:
+    raise InvalidTokenError()
 
-### Handling File Extension Errors
-When using the save() method, if the provided filename does not have a .mp3 extension, a FileExtensionError will be raised. You can handle this exception as follows:
+# Set the voice
+tts.voice = 'Colin'
 
-```python
+# Synthesize and play speech
+tts.speak("Hello, world!")
+
+# Synthesize and save speech as an audio file
 try:
-    tts.save("Hello, world!", "output.wav")
+    tts.save("Hello, world!", "output.mp3")
 except FileExtensionError as e:
     print(e.message)
-```
 
+# Get available voices
+voices = tts.get_voices()
+print(voices)
+```
 ## License
 This project is licensed under the MIT License - see the [LICENSE](https://github.com/PraaneshSelvaraj/speech_engine/blob/main/LICENSE) file for details.
 
