@@ -87,6 +87,8 @@ class TTS_Witai:
         if not self.is_valid_token:
             raise InvalidTokenError()
         self.voice = 'Colin'
+        self.speed = None
+        self.pitch = None
 
     def _validate_token(self):
         """
@@ -108,6 +110,14 @@ class TTS_Witai:
         Args:
             text (str): The text to be synthesized into speech.
         """
+        
+        data = { 'q': text, 'voice': self.voice }
+        if self.speed:
+            data['speed'] = self.speed
+        
+        if self.pitch:
+            data['speed'] = self.pitch
+        
         audio= requests.post(
         'https://api.wit.ai/synthesize',
         params={
@@ -116,7 +126,7 @@ class TTS_Witai:
         headers={
             'Authorization': f'Bearer {self.auth_token}',
         },
-        json={ 'q': text, 'voice': self.voice },
+        json=data,
         )
 
         with open("speech.mp3","wb") as f:
