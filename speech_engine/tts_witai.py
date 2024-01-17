@@ -69,7 +69,7 @@ class TTS_Witai:
         f.close()
         sleep(1)
         winsound.PlaySound("speech.mp3", winsound.SND_FILENAME)
-        # os.remove("speech.mp3")
+        os.remove("speech.mp3")
 
     def save(self, text, filename):
         """
