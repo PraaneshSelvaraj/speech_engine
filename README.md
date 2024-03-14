@@ -19,8 +19,8 @@ from speech_engine import TTS_Google, FileExtensionError
 tts = TTS_Google()
 
 # Set the language and other options
-tts.lang = 'en'
-tts.slow = False
+tts.set_language('en')
+tts.set_slow(False)
 
 # Synthesize and play speech
 tts.speak("Hello, world!")
@@ -44,7 +44,7 @@ if not tts.is_valid_token:
     raise InvalidTokenError()
 
 # Set the voice
-tts.voice = 'Colin'
+tts.set_voice('Colin')
 
 # Synthesize and play speech
 tts.speak("Hello, world!")

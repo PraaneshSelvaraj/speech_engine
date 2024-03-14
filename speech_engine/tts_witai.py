@@ -11,19 +11,72 @@ class TTS_Witai:
 
     Args:
         authToken (str): The Wit.ai auth token.
-
-    Attributes:
-        voice (str): The selected voice for synthesis.
-
     """
+
     def __init__(self, authToken):
         self.auth_token = authToken
         self.is_valid_token = self._validate_token()
+
         if not self.is_valid_token:
             raise InvalidTokenError()
-        self.voice = 'Colin'
-        self.speed = None
-        self.pitch = None
+        
+        self._voice = 'Colin'
+        self._speed = None
+        self._pitch = None
+
+    def get_voice(self) -> str:
+        """
+        Returns the current voice.
+
+        Returns:
+            str: The current voice.
+        """
+        return self._voice
+
+    def set_voice(self, voice : str):
+        """
+        Sets the voice to be used for synthesis.
+
+        Args:
+            voice (str): The voice to be set.
+        """
+        self._voice = voice 
+
+    def get_speed(self) -> int:
+        """
+        Returns the current speed.
+
+        Returns:
+            int: The current speed.
+        """
+        return self._speed
+
+    def set_speed(self, speed : int):
+        """
+        Sets the speed of speech synthesis.
+
+        Args:
+            speed (int): The speed to be set.
+        """
+        self._speed = speed
+
+    def get_pitch(self) -> int:
+        """
+        Returns the current pitch.
+
+        Returns:
+            int: The current pitch.
+        """
+        return self._pitch
+
+    def set_pitch(self, pitch : int):
+        """
+        Sets the pitch of speech synthesis.
+
+        Args:
+            pitch (int): The pitch to be set.
+        """
+        self._pitch = pitch
 
     def _validate_token(self):
         """
@@ -46,12 +99,12 @@ class TTS_Witai:
             text (str): The text to be synthesized into speech.
         """
         
-        data = { 'q': text, 'voice': self.voice }
-        if self.speed:
-            data['speed'] = self.speed
+        data = { 'q': text, 'voice': self._voice }
+        if self._speed:
+            data['speed'] = self._speed
         
-        if self.pitch:
-            data['speed'] = self.pitch
+        if self._pitch:
+            data['speed'] = self._pitch
         
         audio= requests.post(
         'https://api.wit.ai/synthesize',
@@ -83,8 +136,13 @@ class TTS_Witai:
             FileExtensionError: If the provided filename doesn't have a .mp3 extension.
 
         """
-        if not filename.endswith('.mp3'):
-            raise FileExtensionError()
+        data = { 'q': text, 'voice': self._voice }
+        if self._speed:
+            data['speed'] = self._speed
+        
+        if self._pitch:
+            data['speed'] = self._pitch
+        
         audio= requests.post(
         'https://api.wit.ai/synthesize',
         params={
@@ -93,14 +151,21 @@ class TTS_Witai:
         headers={
             'Authorization': f'Bearer {self.auth_token}',
         },
-        json={ 'q': text, 'voice': self.voice },
+        json=data,
         )
 
         with open("speech.mp3", "wb") as f:
             f.write(audio.content)
         f.close()
 
+
     def get_voices(self):
+        """
+        Fetches available voices from the Wit.ai API.
+
+        Returns:
+            list: A list of available voices.
+        """ 
         headers = {
             'Authorization': f'Bearer {self.auth_token}',
         }
@@ -110,6 +175,6 @@ class TTS_Witai:
         voices = []
         for locale_voices in resp.values():
             for voice in locale_voices:
-                voices.append(voice['name'])
+                voices.append(voice['name'].replace("wit$", ""))
 
         return voices
