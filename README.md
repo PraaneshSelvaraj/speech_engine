@@ -34,14 +34,10 @@ except FileExtensionError as e:
 
 ### TTS_Witai
 ```python
-from speech_engine import TTS_Witai, InvalidTokenError, FileExtensionError
+from speech_engine import TTS_Witai
 
 # Instantiate TTS_Witai with the Wit.ai auth token
-tts = TTS_Witai(authToken)
-
-# Check if the provided token is valid
-if not tts.is_valid_token:
-    raise InvalidTokenError()
+tts = TTS_Witai(your_authtoken)
 
 # Set the voice
 tts.set_voice('Colin')
@@ -50,10 +46,30 @@ tts.set_voice('Colin')
 tts.speak("Hello, world!")
 
 # Synthesize and save speech as an audio file
-try:
-    tts.save("Hello, world!", "output.mp3")
-except FileExtensionError as e:
-    print(e.message)
+tts.save("Hello, world!", "output.mp3")
+
+
+# Get available voices
+voices = tts.get_voices()
+print(voices)
+```
+
+### TTS_Openai
+```python
+from speech_engine import TTS_Openai
+
+# Instantiate TTS_Openai with the Openai Api key
+tts = TTS_Openai(your_apikey)
+
+# Set the voice
+tts.set_voice('alloy')
+
+# Synthesize and play speech
+tts.speak("Hello, world!")
+
+# Synthesize and save speech as an audio file
+tts.save("Hello, world!", "output.mp3")
+
 
 # Get available voices
 voices = tts.get_voices()

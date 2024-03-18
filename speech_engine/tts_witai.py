@@ -13,8 +13,11 @@ class TTS_Witai:
         authToken (str): The Wit.ai auth token.
     """
 
-    def __init__(self, authToken):
-        self.auth_token = authToken
+    def __init__(self, authToken : str):
+        if not authToken:
+            raise ValueError("Auth Token cannot be empty")
+        
+        self._auth_token = authToken
         self.is_valid_token = self._validate_token()
 
         if not self.is_valid_token:
@@ -86,12 +89,12 @@ class TTS_Witai:
             bool: True if the token is valid, False otherwise.
         """
         headers = {
-            'Authorization': f'Bearer {self.auth_token}',
+            'Authorization': f'Bearer {self._auth_token}',
         }
         response = requests.get('https://api.wit.ai/voices?v=20220622', headers=headers)
         return response.status_code == 200
 
-    def speak(self, text):
+    def speak(self, text : str):
         """
         Synthesizes the given text into speech and plays it.
 
@@ -112,7 +115,7 @@ class TTS_Witai:
             'v': '20220622',
         },
         headers={
-            'Authorization': f'Bearer {self.auth_token}',
+            'Authorization': f'Bearer {self._auth_token}',
         },
         json=data,
         )
@@ -120,7 +123,7 @@ class TTS_Witai:
         with open("speech.mp3", "wb") as f:
             f.write(audio.content)
         f.close()
-        sleep(1)
+        sleep(0.3)
         winsound.PlaySound("speech.mp3", winsound.SND_FILENAME)
         os.remove("speech.mp3")
 
@@ -136,6 +139,8 @@ class TTS_Witai:
             FileExtensionError: If the provided filename doesn't have a .mp3 extension.
 
         """
+        if filename.split(".")[-1] != "mp3": raise FileExtensionError
+
         data = { 'q': text, 'voice': self._voice }
         if self._speed:
             data['speed'] = self._speed
@@ -149,12 +154,12 @@ class TTS_Witai:
             'v': '20220622',
         },
         headers={
-            'Authorization': f'Bearer {self.auth_token}',
+            'Authorization': f'Bearer {self._auth_token}',
         },
         json=data,
         )
 
-        with open("speech.mp3", "wb") as f:
+        with open(filename, "wb") as f:
             f.write(audio.content)
         f.close()
 
@@ -167,7 +172,7 @@ class TTS_Witai:
             list: A list of available voices.
         """ 
         headers = {
-            'Authorization': f'Bearer {self.auth_token}',
+            'Authorization': f'Bearer {self._auth_token}',
         }
         response = requests.get('https://api.wit.ai/voices?v=20220622', headers=headers)
         resp = json.loads(response.content)
