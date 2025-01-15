@@ -56,7 +56,7 @@ class TTS_Openai:
         playsound("speech.mp3")
         os.remove("speech.mp3")
 
-    def save(self, text : str, filename : str):
+    def save(self, text : str, filename : str = "output.mp3"):
         """
         Synthesizes the given text into speech and saves it as an audio file.
 

@@ -81,7 +81,7 @@ class TTS_Witai:
         """
         self._pitch = pitch
 
-    def _validate_token(self):
+    def _validate_token(self) -> bool:
         """
         Validate the Wit.ai auth token.
 
@@ -127,7 +127,7 @@ class TTS_Witai:
         winsound.PlaySound("speech.mp3", winsound.SND_FILENAME)
         os.remove("speech.mp3")
 
-    def save(self, text, filename):
+    def save(self, text : str, filename : str = "output.mp3"):
         """
         Synthesizes the given text into speech and saves it as an audio file.
 
