@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='speech_engine',
-    version='0.1.0',
+    version='0.1.1',
     author='Praanesh',
     author_email='praaneshselvaraj2003@gmail.com',
     description='Python package for synthesizing text into speech',
