@@ -71,7 +71,7 @@ class TTS_Google:
         """
         self._slow = slow
         
-    def speak(self, text):
+    def speak(self, text : str):
         """
         Synthesizes the given text into speech and plays it.
 
@@ -88,7 +88,7 @@ class TTS_Google:
         playsound("speech.mp3")
         os.remove("speech.mp3")
 
-    def save(self, text, filename):
+    def save(self, text : str, filename : str = "output.mp3"):
         """
         Synthesizes the given text into speech and saves it as an audio file.
 
