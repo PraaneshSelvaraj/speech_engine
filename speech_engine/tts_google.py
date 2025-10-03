@@ -1,8 +1,11 @@
+import io
+
 from gtts import gTTS
-from playsound import playsound
-import os
+from pydub import AudioSegment
+
+from .audioPlayer import AudioPlayer
 from .exceptions import FileExtensionError
-from time import sleep
+
 
 class TTS_Google:
     """
@@ -10,9 +13,10 @@ class TTS_Google:
     """
 
     def __init__(self):
-        self._lang = 'en'
-        self._tld = ''
+        self._lang = "en"
+        self._tld = ""
         self._slow = False
+        self._player = AudioPlayer()
 
     def get_language(self) -> str:
         """
@@ -23,7 +27,7 @@ class TTS_Google:
         """
         return self._lang
 
-    def set_language(self, lang : str):
+    def set_language(self, lang: str):
         """
         Set the language for text synthesis.
 
@@ -42,7 +46,7 @@ class TTS_Google:
         """
         return self._tld
 
-    def set_tld(self, tld : str):
+    def set_tld(self, tld: str):
         """
         Set the top-level domain (TLD) for regional language accents.
 
@@ -61,7 +65,7 @@ class TTS_Google:
         """
         return self._slow
 
-    def set_slow(self, slow : bool):
+    def set_slow(self, slow: bool):
         """
         Set the speech speed.
 
@@ -70,25 +74,43 @@ class TTS_Google:
 
         """
         self._slow = slow
-        
-    def speak(self, text : str):
+
+    def _synthesize_speech(self, text: str) -> gTTS:
+        """
+        Generates a gTTS audio object.
+
+        Args:
+            text (str): The text to be synthesized.
+
+        Returns:
+            gTTS: gTTS object.
+        """
+        if self._tld:
+            return gTTS(text=text, lang=self._lang, tld=self._tld, slow=self._slow)
+
+        return gTTS(text=text, lang=self._lang, slow=self._slow)
+
+    def speak(self, text: str):
         """
         Synthesizes the given text into speech and plays it.
 
         Args:
             text (str): The text to be synthesized into speech.
         """
-        if self._tld:
-            gtts = gTTS(text=text, tld=self._tld, lang=self._lang, slow=self._slow)
-        else:
-            gtts = gTTS(text=text, lang=self._lang, slow=self._slow)
+        gtts = self._synthesize_speech(text)
 
-        gtts.save("speech.mp3")
-        sleep(0.5)
-        playsound("speech.mp3")
-        os.remove("speech.mp3")
+        mp3_buffer = io.BytesIO()
+        gtts.write_to_fp(mp3_buffer)
+        mp3_buffer.seek(0)
 
-    def save(self, text : str, filename : str = "output.mp3"):
+        audio = AudioSegment.from_mp3(mp3_buffer)
+        audio = audio.set_frame_rate(44100).set_sample_width(2).set_channels(2)
+
+        self._player.play_bytes(
+            audio.raw_data, channels=2, sample_width=2, frame_rate=44100
+        )
+
+    def save(self, text: str, filename: str = "output.mp3"):
         """
         Synthesizes the given text into speech and saves it as an audio file.
 
@@ -100,12 +122,7 @@ class TTS_Google:
             FileExtensionError: If the provided filename doesn't have a .mp3 extension.
 
         """
-        if not filename.endswith('.mp3'):
+        if not filename.endswith(".mp3"):
             raise FileExtensionError()
 
-        if self._tld:
-            gtts = gTTS(text=text, tld=self._tld, lang=self._lang, slow=self._slow)
-        else:
-            gtts = gTTS(text=text, lang=self._lang, slow=self._slow)
-
-        gtts.save(filename)
+        self._synthesize_speech(text).save(filename)
