@@ -46,7 +46,7 @@ tts.set_voice('Colin')
 tts.speak("Hello, world!")
 
 # Synthesize and save speech as an audio file
-tts.save("Hello, world!", "output.mp3")
+tts.save("Hello, world!", "output.wav")
 
 
 # Get available voices
@@ -69,6 +69,27 @@ tts.speak("Hello, world!")
 
 # Synthesize and save speech as an audio file
 tts.save("Hello, world!", "output.mp3")
+
+# Get available voices
+voices = tts.get_voices()
+print(voices)
+```
+
+### TTS_Deepgram
+```python
+from speech_engine import TTS_Deepgram
+
+# Instantiate TTS_Openai with the Openai Api key
+tts = TTS_Deepgram(your_apikey)
+
+# Set the voice
+tts.set_voice('aura-angus-en')
+
+# Synthesize and play speech
+tts.speak("Hello, world!")
+
+# Synthesize and save speech as an audio file
+tts.save("Hello, world!", "output.wav")
 
 
 # Get available voices
