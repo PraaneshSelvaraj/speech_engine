@@ -1,4 +1,5 @@
 import io
+from typing import Any
 
 from gtts import gTTS
 from pydub import AudioSegment
@@ -12,11 +13,11 @@ class TTS_Google:
     The TTS_Google class provides functionality to synthesize text into speech using the gTTS library.
     """
 
-    def __init__(self):
-        self._lang = "en"
-        self._tld = ""
-        self._slow = False
-        self._player = AudioPlayer()
+    def __init__(self) -> None:
+        self._lang: str = "en"
+        self._tld: str = ""
+        self._slow: bool = False
+        self._player: AudioPlayer = AudioPlayer()
 
     def get_language(self) -> str:
         """
@@ -27,7 +28,7 @@ class TTS_Google:
         """
         return self._lang
 
-    def set_language(self, lang: str):
+    def set_language(self, lang: str) -> None:
         """
         Set the language for text synthesis.
 
@@ -46,7 +47,7 @@ class TTS_Google:
         """
         return self._tld
 
-    def set_tld(self, tld: str):
+    def set_tld(self, tld: str) -> None:
         """
         Set the top-level domain (TLD) for regional language accents.
 
@@ -65,7 +66,7 @@ class TTS_Google:
         """
         return self._slow
 
-    def set_slow(self, slow: bool):
+    def set_slow(self, slow: bool) -> None:
         """
         Set the speech speed.
 
@@ -75,7 +76,7 @@ class TTS_Google:
         """
         self._slow = slow
 
-    def _synthesize_speech(self, text: str) -> gTTS:
+    def _synthesize_speech(self, text: str) -> Any:
         """
         Generates a gTTS audio object.
 
@@ -90,27 +91,27 @@ class TTS_Google:
 
         return gTTS(text=text, lang=self._lang, slow=self._slow)
 
-    def speak(self, text: str):
+    def speak(self, text: str) -> None:
         """
         Synthesizes the given text into speech and plays it.
 
         Args:
             text (str): The text to be synthesized into speech.
         """
-        gtts = self._synthesize_speech(text)
+        gtts: Any = self._synthesize_speech(text)
 
-        mp3_buffer = io.BytesIO()
+        mp3_buffer: io.BytesIO = io.BytesIO()
         gtts.write_to_fp(mp3_buffer)
         mp3_buffer.seek(0)
 
-        audio = AudioSegment.from_mp3(mp3_buffer)
+        audio: Any = AudioSegment.from_mp3(mp3_buffer)
         audio = audio.set_frame_rate(44100).set_sample_width(2).set_channels(2)
 
         self._player.play_bytes(
             audio.raw_data, channels=2, sample_width=2, frame_rate=44100
         )
 
-    def save(self, text: str, filename: str = "output.mp3"):
+    def save(self, text: str, filename: str = "output.mp3") -> None:
         """
         Synthesizes the given text into speech and saves it as an audio file.
 

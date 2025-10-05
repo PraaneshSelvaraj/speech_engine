@@ -4,7 +4,7 @@ import pyaudio
 
 
 class AudioPlayer:
-    def __init__(self, chunk_size: int = 512):
+    def __init__(self, chunk_size: int = 512) -> None:
         """
         Initializes the AudioPlayer with a given chunk size.
 
@@ -16,7 +16,7 @@ class AudioPlayer:
 
     def play_bytes(
         self, audio_data: bytes, channels: int, sample_width: int, frame_rate: int
-    ):
+    ) -> None:
         """
         Plays audio data directly from bytes or a BytesIO object.
 
