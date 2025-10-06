@@ -1,0 +1,107 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "speech_engine"
+version = "0.2.0"
+description = "Python package for synthesizing text into speech"
+readme = "README.md"
+requires-python = ">=3.7"
+license = {text = "MIT"}
+authors = [
+    {name = "Praanesh", email = "praaneshselvaraj2003@gmail.com"}
+]
+keywords = [
+    "speech_engine",
+    "text2speech",
+    "text-to-speech",
+    "TTS",
+    "speech synthesis",
+    "audio generation",
+    "natural language processing",
+    "language processing",
+    "voice synthesis",
+    "speech output",
+    "speech generation",
+    "language synthesis",
+    "voice output",
+    "audio synthesis",
+    "voice generation",
+]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "gtts>=2.5.4",
+    "playsound>=1.3.0",
+    "openai>=2.1.0",
+    "pyaudio>=0.2.14",
+    "pydub>=0.25.1"
+]
+
+[project.urls]
+Homepage = "https://github.com/PraaneshSelvaraj/speech_engine"
+Repository = "https://github.com/PraaneshSelvaraj/speech_engine"
+
+[project.optional-dependencies]
+dev = [
+  "black>=23.0",
+  "isort>=5.12.0",
+  "mypy>=1.0.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+
+[tool.black]
+line-length = 88
+target-version = ["py38"]
+exclude = '''
+/(
+  \.direnv
+  | \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.nox
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 88
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+known_first_party = ["speech_engine"]
+
+[tool.mypy]
+python_version = "3.10"
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+strict_optional = true
+check_untyped_defs = true
+disable_error_code = ["import-untyped"]
+exclude = "(build|dist|.venv)"
+
+[[tool.mypy.overrides]]
+module = ["pydub"]
+ignore_missing_imports = true
