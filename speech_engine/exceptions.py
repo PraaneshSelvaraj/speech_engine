@@ -3,6 +3,7 @@ class FileExtensionError(Exception):
         self.message = message
         super().__init__(self.message)
 
+
 class InvalidTokenError(Exception):
     def __init__(self, message: str = "Invalid AuthToken") -> None:
         self.message = message

@@ -3,7 +3,9 @@ from typing import Any
 
 from openai import OpenAI
 from playsound import playsound
+
 from .exceptions import FileExtensionError
+
 
 class TTS_Openai:
     """
@@ -16,11 +18,11 @@ class TTS_Openai:
     def __init__(self, apiKey: str) -> None:
         if not apiKey:
             raise ValueError("API key cannot be empty")
-        
+
         self._apiKey: str = apiKey
         self._voice: str = "alloy"
         self._client: Any = OpenAI(api_key=apiKey)
-    
+
     def get_voice(self) -> str:
         """
         Returns the current voice.
@@ -47,11 +49,9 @@ class TTS_Openai:
             text (str): The text to be synthesized into speech.
         """
         response: Any = self._client.audio.speech.create(
-            model="tts-1",
-            voice=self._voice,
-            input=text
+            model="tts-1", voice=self._voice, input=text
         )
-        
+
         response.stream_to_file("speech.mp3")
         playsound("speech.mp3")
         os.remove("speech.mp3")
@@ -72,11 +72,9 @@ class TTS_Openai:
             raise FileExtensionError()
 
         response: Any = self._client.audio.speech.create(
-            model="tts-1",
-            voice=self._voice,
-            input=text
+            model="tts-1", voice=self._voice, input=text
         )
-        
+
         response.stream_to_file(filename)
 
     def get_voices(self) -> list[str]:

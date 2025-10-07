@@ -3,6 +3,7 @@ import wave
 from typing import Any
 
 import requests
+
 from .audioPlayer import AudioPlayer
 from .exceptions import FileExtensionError, InvalidTokenError
 
@@ -15,11 +16,12 @@ class TTS_Deepgram:
         apiKey (str): The Open AI API Key.
 
     """
+
     def __init__(self, apiKey: str) -> None:
         if not apiKey:
             raise ValueError("API key cannot be empty")
 
-        self._voice: str = 'aura-asteria-en'
+        self._voice: str = "aura-asteria-en"
         self._apiKey: str = apiKey
         if not self._validate_token():
             raise InvalidTokenError()
@@ -74,13 +76,15 @@ class TTS_Deepgram:
         }
         payload: dict[str, str] = {"text": text}
 
-        resp: requests.Response = requests.post(DEEPGRAM_URL, headers=headers, json=payload, stream=True)
+        resp: requests.Response = requests.post(
+            DEEPGRAM_URL, headers=headers, json=payload, stream=True
+        )
 
         if resp.status_code != 200:
             raise Exception(f"API Error: {resp.status_code} - {resp.text}")
 
         return resp.content
-    
+
     def save(self, text: str, filename: str = "output.wav") -> None:
         """
         Synthesizes the given text into speech and saves it as an audio file.
@@ -97,7 +101,7 @@ class TTS_Deepgram:
 
         with open(filename, "wb") as f:
             f.write(self._synthesize_speech(text))
-    
+
     def speak(self, text: str) -> None:
         """
         Synthesizes the given text into speech and plays it.
@@ -114,7 +118,7 @@ class TTS_Deepgram:
             raw_audio: bytes = wav_file.readframes(wav_file.getnframes())
 
         self._player.play_bytes(raw_audio, channels, sample_width, frame_rate)
-    
+
     def get_voices(self) -> list[str]:
         """
         Fetches available voices from the Deepgram API.
@@ -123,12 +127,10 @@ class TTS_Deepgram:
             list: A list of available voices.
         """
         url: str = "https://api.deepgram.com/v1/models"
-        headers: dict[str, str] = {
-            "Authorization": f"Token {self._apiKey}"
-        }
+        headers: dict[str, str] = {"Authorization": f"Token {self._apiKey}"}
         response: requests.Response = requests.get(url, headers=headers)
         data: dict[str, Any] = response.json()
-        
+
         voices: list[str] = []
         for model in data.get("tts", []):
             voice_name: str | None = model.get("canonical_name")

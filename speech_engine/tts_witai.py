@@ -22,7 +22,9 @@ class TTS_Witai:
 
         self._auth_token: str = authToken
         self._api_version: str = "20220622"
-        self._request_headers: dict[str, str] = {"Authorization": f"Bearer {self._auth_token}"}
+        self._request_headers: dict[str, str] = {
+            "Authorization": f"Bearer {self._auth_token}"
+        }
 
         if not self._validate_token():
             raise InvalidTokenError()
