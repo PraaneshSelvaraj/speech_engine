@@ -2,7 +2,7 @@ import os
 from typing import Any
 
 from openai import OpenAI
-from playsound import playsound
+from playsound3 import playsound
 
 from .exceptions import FileExtensionError
 
