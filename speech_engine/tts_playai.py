@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 import io
-import wave
 import os
 import subprocess
-import requests
+import wave
 from typing import List
+
+import requests
 
 from .audioPlayer import AudioPlayer
 from .exceptions import FileExtensionError, InvalidTokenError
