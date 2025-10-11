@@ -1,3 +1,7 @@
+import static_ffmpeg
+
+static_ffmpeg.add_paths()
+
 from .exceptions import FileExtensionError, InvalidTokenError
 from .tts_deepgram import TTS_Deepgram
 from .tts_elevenlabs import TTS_ElevenLabs
